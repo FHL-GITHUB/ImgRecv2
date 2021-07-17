@@ -33,7 +33,7 @@ def receiveImage():
     #save received photo
     cv2.imwrite("./model_test/up/1.jpg", frame)  
 
-    target,result_ID = testModel.test()
+    target,result_ID = predict.test()
     print('Predicted result: '+target+"\nTarget ID: "+str(result_ID))
     return target,result_ID
 
