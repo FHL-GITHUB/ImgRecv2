@@ -1,6 +1,5 @@
 from flask import Flask, request
 import pickle, json, cv2, math, threading,os,glob,requests
-#from test_model import 
 import predict
 
 app = Flask(__name__)
