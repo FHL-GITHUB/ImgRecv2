@@ -4,7 +4,7 @@ import predict
 
 app = Flask(__name__)
 
-# Endpoint to receive image data
+# receive image data through HTTP post
 @app.route('/', methods=['POST'])
 def receiveImage():
     global target,label
