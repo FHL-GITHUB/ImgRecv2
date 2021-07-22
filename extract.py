@@ -1,14 +1,13 @@
-import cv2,os,glob
+import torch,cv2,os,glob
 import numpy as np
 from PIL import Image
-import torch
 import torchvision.transforms as transforms
 
 
 def extractBBox(image):
 
     #clear the images in the sub directory
-    savedir = os.path.join(os.getcwd(), 'model_test/up')
+    savedir = os.path.join(os.getcwd(), 'predict_result/result')
     if not os.path.exists(savedir):
         os.makedirs(savedir)
             
@@ -54,20 +53,19 @@ def extractBBox(image):
     images = []
     cropped = []
     for i,contour in enumerate(contours):
-        
         area = cv2.contourArea(contour)
-
-        if area < 3000:
+        if area < 750:
+        #if area < 3000:
             continue
         elif area > 12000:
             continue
         rect = cv2.boundingRect(contour)
         x, y, w, h = rect
-
         
         if w < 20 or h < 20:
             continue
-        if w > 2*h:
+        #if w > 2*h:
+        if w > 1.5*h:
             continue
 
         img = new_image[y:y+h,x:x+w]
