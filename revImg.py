@@ -4,48 +4,31 @@ import pickle, json, cv2, math, threading,os,glob,requests
 import predict
 
 app = Flask(__name__)
-url ='http://192.168.6.6:8123'
 
 # Endpoint to receive image data
 @app.route('/', methods=['POST'])
 def receiveImage():
     global target,label
     #clear the image in the save directory
-    imagedir = os.path.join(os.getcwd(),'model_test/up')
+    imagedir = os.path.join(os.getcwd(),'predict_result/result')
     if not os.path.exists(imagedir):
         os.makedirs(imagedir)
     filelist = glob.glob(os.path.join(imagedir, "*.jpg"))
     for f in filelist:
         os.remove(f)
 
-    
-    #clear the image in the result directory
-    resultdir = os.path.join(os.getcwd(),'model_test/up/result')
-    if not os.path.exists(resultdir):
-        os.makedirs(resultdir)
-    filelist = glob.glob(os.path.join(resultdir, "*.jpg"))
-    for f in filelist:
-        os.remove(f)
-    
-
     content = request.data
     frame = pickle.loads(content)
     #save received photo
-    cv2.imwrite("./model_test/up/1.jpg", frame)  
+    cv2.imwrite("./predict_result/result/target.jpg", frame)  
 
     target,result_ID = predict.test()
-    print('Predicted result: '+target+"\nTarget ID: "+str(result_ID))
-    return target,result_ID
-
-# Endpoint to send classification results to algo team
-@app.route('/end', methods=['GET'])
-def finished():
-    #threading.Thread(target = )
-    print(json.dumps(target)+":"+json.dumps(target))
-    response = requests.post(url,data = json.dumps(target))
-    #return json.dumps(target)+":"+json.dumps(target)
+    print('\n==================\nPredicted result: '+target\
+        +"\n==================\nTarget ID: "+str(result_ID)\
+            +'\n==================')
+    response = make_response("{}:{}".format(result_ID, target))
+    response.mimetype="text/plain"
     return response
-
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8123)
