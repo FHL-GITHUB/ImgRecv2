@@ -86,8 +86,6 @@ def extractBBox(image):
         img.requires_grad=False
         bb.append(img)
 
-
-
         #raw_contour = cv2.drawContours(new_image, contours, i,(255,255,255), 1)
         #rects = cv2.rectangle(predImg,(x,y), (x+w,y+h), (0,0,255), 2)
         #cv2.putText(predImg, 'BB_'+str(count), (x, y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (36,255,12), 2)
@@ -97,8 +95,6 @@ def extractBBox(image):
         #cv2.destroyAllWindows()
         boxes.append(np.array(rect))
         count+=1
-
-    
     
     for i, rect in enumerate(boxes):
         img_copy = new_image.copy()
