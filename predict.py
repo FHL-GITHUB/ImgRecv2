@@ -13,7 +13,6 @@ def softmax(x):
     exp_x = np.exp(x)
     sum_exp_x = np.sum(exp_x)
     y = exp_x / sum_exp_x
-
     return y
     
 def test():
@@ -83,7 +82,6 @@ def test():
             print(str(x)+' '+str(y)+' '+str(w)+' '+str(h))
             break
 
-
     cv2.putText(result, pred_result , (x+int(w/2), y+int(h/2)), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (36,255,12), 2)
     #cv2.imshow('Result', result)
     #cv2.waitKey(0
@@ -101,9 +99,6 @@ def test():
     #print(pred_result)
     result_ID = dic_class[pred_result]
     return pred_result,result_ID
-
-
-
 
 if __name__ == '__main__':
     target,result_ID = test()
