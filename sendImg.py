@@ -6,8 +6,6 @@ import time, pickle, requests, threading,os,datetime,glob
 from picamera import PiCamera
 from picamera.array import PiRGBArray
 
-
-
 class sendImg:
   def __init__(self):
     self.count = 0
@@ -20,7 +18,6 @@ class sendImg:
 
     self.camera.start_preview()
     threading.Thread(target=time.sleep, args=(2,)).start()
-
 
   def takePic(self):
     self.camera.capture(self.output, 'bgr')
