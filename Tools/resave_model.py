@@ -15,6 +15,6 @@ if __name__ == '__main__':
                                            nn.ReLU(),  
                                            nn.Dropout(0.50), 
                                            nn.Linear(128,16))
-    net.load_state_dict(torch.load(r'newCNNmodel.pt', map_location=torch.device('cpu')))
+    net.load_state_dict(torch.load(r'trained_model.pt', map_location=torch.device('cpu')))
     net.eval()
     torch.save(net, "./model_with_color.pt")
