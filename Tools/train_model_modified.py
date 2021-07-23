@@ -91,10 +91,10 @@ def run():
     TRAIN_PATH = os.path.join(os.getcwd(), '7019/train')
     VALIDATE_PATH = os.path.join(os.getcwd(), '7019/test')
 
-    #transform = Compose([ToTensor(), Resize((32, 32))])
+    transform = Compose([ToTensor(), Resize((32, 32))])
     #transform = Compose([ToTensor(), Resize((224, 224)), Grayscale(3)])
     # Load train data and test data
-    transform = Compose([ToTensor(), Resize((32, 32)), Grayscale(3)])
+    #transform = Compose([ToTensor(), Resize((32, 32)), Grayscale(3)])
 
     train_data = ImageFolder(root=TRAIN_PATH, transform=transform)
     validate_data = ImageFolder(root=VALIDATE_PATH, transform=transform)
