@@ -1,7 +1,5 @@
 import numpy as np
-#import matplotlib.pyplot as plt
 from torch import optim
-# Import PyTorch packages
 import torch, os
 import torch.nn as nn
 from torch.utils.data import DataLoader, Dataset, random_split
@@ -10,13 +8,11 @@ from torchvision.datasets import ImageFolder
 from torchvision.utils import make_grid
 from efficientnet_pytorch import EfficientNet
 from random import randint
-
 import torch.nn.functional as F
 
 def calcAccuracy(scores, label):
     _, prediction = torch.max(scores.cpu(), dim=1)
     return torch.tensor(torch.sum(prediction == label.cpu()).cpu().item() / len(scores))
-
 
 # Cross validate
 def validate(validate_ds, model, softmax, device):
@@ -32,7 +28,6 @@ def validate(validate_ds, model, softmax, device):
     accuracy /= validate_length
     return loss, accuracy
     #return accuracy
-
 
 # Run the training and cross validation
 def fit(train_ds, validate_ds, no_epochs, optimizer, model, device):
@@ -58,7 +53,6 @@ def fit(train_ds, validate_ds, no_epochs, optimizer, model, device):
 
             # Print epoch record
             print(f"Epoch [{index + 1}/{no_epochs}] => loss: {loss}, val_loss: {valid_loss}, val_acc: {valid_acr}")
-            #print(f"Epoch [{index + 1}/{no_epochs}] => val_acc: {valid_acr}")
             if valid_acr > valid_acr_compare:
                 torch.save(model.state_dict(), "./efficient_net.pt")
                 valid_acr_compare = valid_acr
@@ -80,7 +74,6 @@ def to_device(data, device):
         return [to_device(x, device) for x in data]
     return data.to(device, non_blocking=True)
 
-
 class GPUDataLoader():
     def __init__(self, ds, device):
         self.ds = ds
@@ -89,7 +82,6 @@ class GPUDataLoader():
     def __iter__(self):
         for batch in self.ds:
             yield to_device(batch, self.device)
-
 
 def run():
     torch.cuda.empty_cache()
@@ -124,19 +116,6 @@ def run():
     train_ds = DataLoader(train_data, batch_size=32, shuffle=True, pin_memory=True, num_workers=8)
     validate_ds = DataLoader(validate_data, batch_size=32, shuffle=True, pin_memory=True, num_workers=8)
 
-    # count = 0
-    # figure, axis = plt.subplots(1, 4, figsize=(16, 8))
-
-    # for batch in train_ds:
-    #     img, lbl = batch
-    #     axis[count].imshow(img[0].permute(1, 2, 0))
-    #     axis[count].set_title(classes[lbl.item()])
-    #     axis[count].axis("off")
-    #     if count == 3:
-    #         break
-    #     else:
-    #         count += 1
-    # plt.show()
     model = EfficientNet.from_name('efficientnet-b0')  #efficientnet-b3
     # model = SimpleNet()
     feature = model._fc.in_features
@@ -149,9 +128,7 @@ def run():
                                            nn.ReLU(),  
                                            nn.Dropout(0.50), 
                                            nn.Linear(128,15))
-    #model._fc = nn.Linear(1280, 16)
-    #model._fc = nn.Linear(1280, 16)
-
+    #model._fc = nn.Linear(1280, 15)
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model = model.to(device)
@@ -168,8 +145,6 @@ def run():
     no_epochs = 55
     history = fit(train_ds, validate_ds, no_epochs, optimizer, model, device)
 
-    #print(history)
-
     train_loss = []
     valid_loss = []
     valid_acr = []
@@ -183,8 +158,7 @@ def run():
     valid_acr = [x.item() for x in valid_acr]
     epochs = np.arange(no_epochs)
 
-    #torch.save(model.module.state_dict(), "./newCNNmodel.pt",_use_new_zipfile_serialization=False)
-    torch.save(model.state_dict(), "./newCNNmodelGrey.pt",_use_new_zipfile_serialization=False)
+    torch.save(model.state_dict(), "./trained_model.pt",_use_new_zipfile_serialization=False)
 
     
 
